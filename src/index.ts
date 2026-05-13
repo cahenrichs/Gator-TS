@@ -1,10 +1,11 @@
 import { readConfig, setUser } from "./config.js";
 import { CommandsRegistry, registerCommand, runCommand } from "./commands/commands.js";
-import { handlerLogin } from "./commands/users.js";
+import { handlerLogin, handlerRegister } from "./commands/users.js";
 
 async function main() {
 const commandRegistry: CommandsRegistry = {};
 await registerCommand(commandRegistry, "login", handlerLogin);
+await registerCommand(commandRegistry, "register", handlerRegister);
 const args = process.argv.slice(2);
 if (args.length === 0) {
     console.error("No command provided.");
