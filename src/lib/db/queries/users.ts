@@ -17,3 +17,8 @@ export async function resetDB() {
     await db.delete(users);
     return true;
 }
+
+export async function getUsers() {
+    const allUsers = db.query.users.findMany();
+    return allUsers;
+}
