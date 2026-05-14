@@ -4,8 +4,8 @@ import { defineConfig } from 'drizzle-kit';
 const config = readConfig();
 
 export default defineConfig({
-  schema: "./src/db/schema.ts",
-  out: "./src/db/migrations",
+  schema: "./src/lib/db/schema.ts",
+  out: "./src/lib/db/migrations",
   dialect: "postgresql",
   dbCredentials: {
     url: config.dbUrl,
