@@ -1,5 +1,5 @@
 import { readConfig } from '../config.js';
-import { createFeed } from '../lib/db/queries/feeds.js';
+import { createFeed, getFeeds } from '../lib/db/queries/feeds.js';
 import { getUserByName } from '../lib/db/queries/users.js';
 import { Feed, User } from '../lib/db/schema.js';
 
@@ -28,3 +28,11 @@ export function printFeed(feed: Feed, user: User) {
     console.log(`userId: ${feed.userId}`);
 }
 
+export async function handlerListFeeds(cmdName: string, ...args: string[]) {
+    const result = await getFeeds();
+    for (const { feeds, users } of result) {
+        console.log(`Feed: ${feeds.name}`);
+        console.log(`URL: ${feeds.url}`);
+        console.log(`User Name: ${users.name}`);
+    }
+} 
