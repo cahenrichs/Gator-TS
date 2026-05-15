@@ -3,6 +3,7 @@ import { CommandsRegistry, registerCommand, runCommand } from "./commands/comman
 import { handlerListUsers, handlerLogin, handlerRegister } from "./commands/users.js";
 import { handlerResetUsers } from "./commands/reset.js";
 import { handlerAgg } from "./commands/aggregate.js";
+import { handlerAddFeed } from "./commands/addFeed.js";
 
 async function main() {
 const commandRegistry: CommandsRegistry = {};
@@ -11,6 +12,7 @@ await registerCommand(commandRegistry, "register", handlerRegister);
 await registerCommand(commandRegistry, "reset", handlerResetUsers);
 await registerCommand(commandRegistry, "users", handlerListUsers);
 await registerCommand(commandRegistry, "agg", handlerAgg); 
+await registerCommand(commandRegistry, "addfeed", handlerAddFeed);
 const args = process.argv.slice(2);
 if (args.length === 0) {
     console.error("No command provided.");
