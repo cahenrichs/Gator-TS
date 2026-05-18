@@ -27,7 +27,7 @@ const [cmdName, ...cmdArgs] = args;
 try {
     await runCommand(commandRegistry, cmdName, ...cmdArgs);
 } catch (error) {
-    console.error(`Error executing command: ${error}`);
+    console.error(error);
     process.exit(1);
 }
 process.exit(0);

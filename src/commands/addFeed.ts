@@ -1,4 +1,5 @@
 import { readConfig } from '../config.js';
+import { createFeedFollow } from '../lib/db/queries/feedFollows.js';
 import { createFeed, getFeeds } from '../lib/db/queries/feeds.js';
 import { getUserByName } from '../lib/db/queries/users.js';
 import { Feed, User } from '../lib/db/schema.js';
@@ -15,7 +16,10 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]) {
         throw new Error(`User "${config.currentUserName}" not found.`);
     }
     const feed = await createFeed(name, url, user.id);
+    const addedFeed = await createFeedFollow(user.id, feed.id);
+
     printFeed(feed, user);   
+
 }
 
 export function printFeed(feed: Feed, user: User) {
