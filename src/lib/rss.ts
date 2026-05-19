@@ -60,10 +60,11 @@ for (const item of rawItems) {
     });     
 }
 return {
+    channel: {
         title: channel.title,
         link: channel.link,
         description: channel.description,
-        items: items
-    };
-
+        item: items
+    }
+};
 }
