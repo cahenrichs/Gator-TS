@@ -2,9 +2,11 @@ import { getUserByName } from "../lib/db/queries/users.js";
 import { getFeedsByUrl } from "../lib/db/queries/feeds.js";
 import { createFeedFollow } from "../lib/db/queries/feedFollows.js";
 import { readConfig } from "../config.js";
+import { User } from "../lib/db/schema.js";
 
 export async function handlerFollow(
   cmdName: string,
+  user: User,
   url: string,
 ) {
   if (!url) {
@@ -13,9 +15,9 @@ export async function handlerFollow(
   
   const config = readConfig();
 
-  const user = await getUserByName(config.currentUserName);
+  const getuser = await getUserByName(config.currentUserName);
 
-  if (!user) {
+  if (!getuser) {
     throw new Error("User not found");
   }
 
@@ -26,7 +28,7 @@ export async function handlerFollow(
   }
 
   const feedFollow = await createFeedFollow(
-    user.id,
+    getuser.id,
     feed.id
   );
 

@@ -22,3 +22,10 @@ export async function getUsers() {
     const allUsers = db.query.users.findMany();
     return allUsers;
 }
+
+export async function getUser(name: string) {
+    const user  = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.name, name)
+    });
+    return user;
+}
