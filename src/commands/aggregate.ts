@@ -1,10 +1,34 @@
 import { getNextFeedToFetch, markFeedFetched } from "../lib/db/queries/feeds.js";
 import { fetchFeed } from "../lib/rss.js";
+import { parseDuration } from "../lib/time.js";
 
 
 export async function handlerAgg(cmdName: string, ...args: string[]) {
-    const feed = await fetchFeed("https://www.wagslane.dev/index.xml");
-    console.log(feed);
+    if (args.length !== 1) {
+        console.error("Usage: agg <time_between_requests>");
+        return;
+    }
+    const timeBetweenReqs = args[0];
+
+    const durationMs = parseDuration(timeBetweenReqs);
+    if (durationMs === null) {
+        console.error("Invalid duration format. Use formats like '10s', '5m', '1h', etc.");
+        return;
+    }
+
+    scrapeFeeds().catch(handleError);
+
+    const interval = setInterval(() => {
+    scrapeFeeds().catch(handleError);
+    }, durationMs);
+
+  await new Promise<void>((resolve) => {
+  process.on("SIGINT", () => {
+    console.log("Shutting down feed aggregator...");
+    clearInterval(interval);
+    resolve();
+  });
+});
 }
 
 async function scrapeFeeds() {
@@ -24,5 +48,9 @@ async function scrapeFeeds() {
     for (const item of feedData.channel.item) {
         console.log(`Title: ${item.title}`);
     }
-
 }
+
+function handleError(err: unknown): never {
+  throw err instanceof Error ? err : new Error(String(err));
+}
+
