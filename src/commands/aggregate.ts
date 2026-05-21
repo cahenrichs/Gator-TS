@@ -45,8 +45,8 @@ async function scrapeFeeds() {
     if (!marked) {
         console.error(`Failed to mark feed ${getFeeds.id} as fetched.`);
     }
-
     for (const item of feedData.channel.item) {
+        try {
         const post = await createPost({
             title: item.title,
             url: item.link,
@@ -57,10 +57,11 @@ async function scrapeFeeds() {
             
         );
         console.log(`Created post: ${post.title}`);
+    } catch (e) {
     }
+}
 }
 
 function handleError(err: unknown): never {
   throw err instanceof Error ? err : new Error(String(err));
 }
-
