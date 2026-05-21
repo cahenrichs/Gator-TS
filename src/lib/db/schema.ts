@@ -39,16 +39,16 @@ export const feedFollows = pgTable("feed_follows", {
 );
 
 export const posts = pgTable("posts", {
-  if: uuid("id").primaryKey().defaultRandom().notNull(),
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),
   title: text("title").notNull(),
   url: text("url").notNull().unique(),
   description: text("description"),
-  published_at: timestamp("published_at").notNull(),
+  publishedAt: timestamp("published_at").notNull(),
   feedId: uuid("feed_id").notNull().references(() => feeds.id, { onDelete: "cascade" }),
 });
 export type Feed = typeof feeds.$inferSelect;
 export type User = typeof users.$inferSelect;
 export type FeedFollow = typeof feedFollows.$inferSelect;
-export type Post = typeof posts.$inferSelect;
+export type NewPost = typeof posts.$inferInsert;

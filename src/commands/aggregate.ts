@@ -1,4 +1,5 @@
 import { getNextFeedToFetch, markFeedFetched } from "../lib/db/queries/feeds.js";
+import { createPost } from "../lib/db/queries/posts.js";
 import { fetchFeed } from "../lib/rss.js";
 import { parseDuration } from "../lib/time.js";
 
@@ -46,7 +47,16 @@ async function scrapeFeeds() {
     }
 
     for (const item of feedData.channel.item) {
-        console.log(`Title: ${item.title}`);
+        const post = await createPost({
+            title: item.title,
+            url: item.link,
+            description: item.description,
+            publishedAt: new Date(item.pubDate),
+            feedId: getFeeds.id
+        }
+            
+        );
+        console.log(`Created post: ${post.title}`);
     }
 }
 
